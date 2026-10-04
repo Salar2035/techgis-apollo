@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import type { User, DesignationProposal, DailyTask, EODReport, SystemHealth, Role } from '../types';
-import { INITIAL_USERS, INITIAL_PROPOSALS, INITIAL_TASKS, INITIAL_EOD_REPORTS, SYSTEM_HEALTH_DATA } from '../mockData';
+import type { User, DesignationProposal, DailyTask, EODReport, SystemHealth, Role, TechGISWorkstream } from '../types';
+import { INITIAL_USERS, INITIAL_PROPOSALS, INITIAL_TASKS, INITIAL_EOD_REPORTS, SYSTEM_HEALTH_DATA, TECHGIS_WORKSTREAMS } from '../mockData';
 
 interface AppContextType {
   currentUser: User;
@@ -9,6 +9,7 @@ interface AppContextType {
   tasks: DailyTask[];
   eodReports: EODReport[];
   systemHealth: SystemHealth[];
+  workstreams: TechGISWorkstream[];
   setCurrentUser: (user: User) => void;
   registerUser: (userData: {
     name: string;
@@ -31,10 +32,10 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-const LOCAL_KEY_USERS = 'techgis_apollo_users_v3';
-const LOCAL_KEY_PROPOSALS = 'techgis_apollo_proposals_v3';
-const LOCAL_KEY_TASKS = 'techgis_apollo_tasks_v3';
-const LOCAL_KEY_EOD = 'techgis_apollo_eod_v3';
+const LOCAL_KEY_USERS = 'techgis_apollo_users_v4';
+const LOCAL_KEY_PROPOSALS = 'techgis_apollo_proposals_v4';
+const LOCAL_KEY_TASKS = 'techgis_apollo_tasks_v4';
+const LOCAL_KEY_EOD = 'techgis_apollo_eod_v4';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [users, setUsers] = useState<User[]>(() => {
@@ -62,6 +63,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   const [systemHealth] = useState<SystemHealth[]>(SYSTEM_HEALTH_DATA);
+  const [workstreams] = useState<TechGISWorkstream[]>(TECHGIS_WORKSTREAMS);
   const [activeTab, setActiveTab] = useState<string>('dashboard');
 
   useEffect(() => {
@@ -110,7 +112,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
 
     setUsers(prev => [...prev, newUser]);
-    setCurrentUser(newUser); // Automatically log into the newly created account
+    setCurrentUser(newUser);
     return newUser;
   };
 
@@ -133,7 +135,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       proposedByAdminName: currentUser.name,
       reason,
       requiredApprovals,
-      approvedByAdminIds: [currentUser.id], // Auto-vote creator
+      approvedByAdminIds: [currentUser.id],
       status: requiredApprovals === 1 ? 'APPROVED' : 'PENDING_APPROVAL',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -261,6 +263,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         tasks,
         eodReports,
         systemHealth,
+        workstreams,
         setCurrentUser,
         registerUser,
         createDesignationProposal,

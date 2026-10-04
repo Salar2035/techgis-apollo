@@ -50,6 +50,7 @@ export interface DailyTask {
   dueDate: string;
   estimatedHours: number;
   createdAt: string;
+  clientName?: string;
 }
 
 export interface EODReport {
@@ -70,9 +71,20 @@ export interface EODReport {
 
 export interface SystemHealth {
   name: string;
-  category: 'GIS Cluster' | 'Database' | 'Processing' | 'Deployment';
+  category: 'GIS Cluster' | 'Database' | 'Processing' | 'Deployment' | 'Command Center';
   status: 'OPTIMAL' | 'WARNING' | 'CRITICAL';
   uptime: string;
   latencyMs: number;
   loadPercent: number;
+}
+
+export interface TechGISWorkstream {
+  id: string;
+  client: string;
+  title: string;
+  category: 'Geospatial & Drone' | 'Smart City & Digital Twins' | 'IoT & Mesh' | 'Software & PostGIS' | 'Mining Dept';
+  status: 'Demo Ready' | 'In Progress' | 'Awaiting Review' | 'QC Stage' | 'Blocked';
+  progressPercent: number;
+  leadPerson: string;
+  targetDeadline: string;
 }
